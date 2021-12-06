@@ -1,6 +1,6 @@
 import { Routes as Switch, Route } from 'react-router-dom'
-import Dashboard from '../pages/dashboard/Dashboard'
-import Repository from '../pages/repository'
+import { Dashboard } from '../pages/dashboard/Dashboard'
+import { Repository } from '../pages/repository'
 
 export const Routes: React.FC = () => {
   return (
