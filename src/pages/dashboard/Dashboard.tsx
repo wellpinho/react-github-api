@@ -1,27 +1,62 @@
 import styled from "styled-components";
 import logo from '../../assets/logo.svg'
 import { FiChevronRight } from 'react-icons/fi'
+import { api } from '../../api'
+import React from "react";
+
+interface IGithubRepository {
+  full_name: string
+  description: string
+  owner: {
+    login: string
+    avatar_url: string
+  }
+}
 
 export const Dashboard: React.FC = () => {
+  const [repository, setRepository] = React.useState<IGithubRepository[]>([])
+  const [newRepository, setNewRepository] = React.useState('')
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    setNewRepository(event.target.value)
+  }
+
+  async function handleAddRepository(event: React.FormEvent<HTMLFormElement>): Promise<void> {
+    event.preventDefault()
+    const response = await api.get<IGithubRepository>(`repos/${newRepository}`)
+    const repositoryData = response.data
+
+    setRepository([...repository, repositoryData])
+    setNewRepository('')
+  }
+
   return (
     <>
       <img src={logo} alt="GitCollection" />
       <Title>Lista de repositórios do Github</Title>
 
-      <Form>
-        <input type="text" placeholder="username/repository_name" />
+      <Form onSubmit={handleAddRepository}>
+        <input
+          type="text"
+          placeholder="username/repository_name"
+          onChange={handleInputChange}
+        />
         <button type="submit">Buscar</button>
       </Form>
 
       <Repositories>
-        <a href="/repositories">
-          <img src="https://avatars.githubusercontent.com/u/9344482?v=4" alt="Repositorio" />
-          <div>
-            <strong>wellpinho/react-github-api</strong>
-            <p>Repositorio do curso de ReactJS</p>
-          </div>
-          <FiChevronRight size={20} />
-        </a>
+        {repository.map(item => {
+          return (
+            <a href="/repositories" key={item.full_name}>
+              <img src={item.owner.avatar_url} alt={item.owner.login} />
+              <div>
+                <strong>{item.full_name}</strong>
+                <p>{item.description}</p>
+              </div>
+              <FiChevronRight size={20} />
+            </a>
+          )
+        })}
       </Repositories>
     </>
   );
