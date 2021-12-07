@@ -22,6 +22,11 @@ export const GlobalStyle = createGlobalStyle`
   body {
     background: #f0f0f5 url(${imgBackground}) no-repeat 70% top;
     -webkit-font-smooth: antialized;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  body, input, textarea, select, button {
+    font: 400 1rem "Robot", sans-serif;
   }
 
   #root {
