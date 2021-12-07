@@ -14,9 +14,23 @@ interface IGithubRepository {
 }
 
 export const Dashboard: React.FC = () => {
-  const [repository, setRepository] = React.useState<IGithubRepository[]>([])
+  const [repository, setRepository] = React.useState<IGithubRepository[]>(() => {
+    const storeRepository = localStorage.getItem('@gitcCollection:repositories')
+
+    if (storeRepository) {
+      return JSON.parse(storeRepository)
+    }
+
+    return []
+  })
+
   const [newRepository, setNewRepository] = React.useState('')
   const [inputError, setInputError] = React.useState('')
+
+  // sempre que o estado repository for atualziado, useEffect é chamado
+  React.useEffect(() => {
+    localStorage.setItem('@gitcCollection:repositories', JSON.stringify(repository))
+  }, [repository])
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setNewRepository(event.target.value)
