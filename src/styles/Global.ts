@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 import imgBackground from '../assets/background.svg'
+import { shade } from 'polished'
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -29,8 +30,19 @@ export const GlobalStyle = createGlobalStyle`
     padding: 2.5rem 1.25rem;
   }
 
-  buttn {
+  button {
+    width: 160px;
+    background-color: #54E346;
+    border-radius: 0 5px 5px 0;
+    border: 0;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.2s;
     cursor: pointer;
+
+    &:hover {
+      background-color: ${shade(0.2, '#54E346')};
+    }
   }
 
   a {
