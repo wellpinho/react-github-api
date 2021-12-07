@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import logo from '../../assets/logo.svg'
 import { FiChevronRight } from 'react-icons/fi'
 import { api } from '../../api'
@@ -16,6 +16,7 @@ interface IGithubRepository {
 export const Dashboard: React.FC = () => {
   const [repository, setRepository] = React.useState<IGithubRepository[]>([])
   const [newRepository, setNewRepository] = React.useState('')
+  const [inputError, setInputError] = React.useState('')
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
     setNewRepository(event.target.value)
@@ -23,6 +24,12 @@ export const Dashboard: React.FC = () => {
 
   async function handleAddRepository(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
+
+    if (!newRepository) {
+      setInputError('Informe o username/repositório')
+      return
+    }
+
     const response = await api.get<IGithubRepository>(`repos/${newRepository}`)
     const repositoryData = response.data
 
@@ -35,7 +42,7 @@ export const Dashboard: React.FC = () => {
       <img src={logo} alt="GitCollection" />
       <Title>Lista de repositórios do Github</Title>
 
-      <Form onSubmit={handleAddRepository}>
+      <Form hasError={Boolean(inputError)} onSubmit={handleAddRepository}>
         <input
           type="text"
           placeholder="username/repository_name"
@@ -43,6 +50,7 @@ export const Dashboard: React.FC = () => {
         />
         <button type="submit">Buscar</button>
       </Form>
+      {inputError && <Error>{inputError}</Error>}
 
       <Repositories>
         {repository.map(item => {
@@ -62,6 +70,10 @@ export const Dashboard: React.FC = () => {
   );
 }
 
+interface IFormProps {
+  hasError: boolean
+}
+
 const Title = styled.h1`
   font-size: 4.25rem;
   color: #3a3a3a;
@@ -70,7 +82,7 @@ const Title = styled.h1`
   margin-top: 8rem;
 `
 
-const Form = styled.form`
+const Form = styled.form<IFormProps>`
   max-width: 70rem;
   margin-top: 4rem;
   display: flex;
@@ -79,10 +91,14 @@ const Form = styled.form`
     flex: 1;
     height: 4.375rem;
     padding: 0 2.4rem;
-    border: .2rem solid #fff;
-    border-radius: .5rem 0 .5rem;
+    border: .1rem solid #fff;
+    border-radius: .5rem 0 0 .5rem;
     color: #3a3a3a;
     border-right: 0;
+
+    ${(props) => props.hasError && css`
+      border-color: #c53030a6;
+    `}
 
     &::placeholder {
       color: #a8a8b3;
@@ -138,4 +154,9 @@ const Repositories = styled.div`
       color: #cbcbd6;
     }
   }
+`
+const Error = styled.span`
+  display: block;
+  color: #c53030;
+  margin-top: 8px;
 `
