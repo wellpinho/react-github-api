@@ -3,6 +3,7 @@ import logo from '../../assets/logo.svg'
 import { FiChevronRight } from 'react-icons/fi'
 import { api } from '../../api'
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface IGithubRepository {
   full_name: string
@@ -69,14 +70,14 @@ export const Dashboard: React.FC = () => {
       <Repositories>
         {repository.map(item => {
           return (
-            <a href="/repositories" key={item.full_name}>
+            <Link to={`/repositories/${item.full_name}`} key={item.full_name}>
               <img src={item.owner.avatar_url} alt={item.owner.login} />
               <div>
                 <strong>{item.full_name}</strong>
                 <p>{item.description}</p>
               </div>
               <FiChevronRight size={20} />
-            </a>
+            </Link>
           )
         })}
       </Repositories>
