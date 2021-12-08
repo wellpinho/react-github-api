@@ -1,6 +1,6 @@
 import { Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
-import { FiChevronsLeft } from 'react-icons/fi'
+import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi'
 import Logo from './../../assets/logo.svg'
 
 interface IParams {
@@ -44,6 +44,16 @@ export const Repository: React.FC = () => {
           </li>
         </ul>
       </RepositoryInfo>
+
+      <Issues>
+        <Link to="/">
+          <div>
+            <strong>titulo da issue</strong>
+            <p>descrição da issue</p>
+          </div>
+          <FiChevronsRight size="20" />
+        </Link>
+      </Issues>
     </>
   );
 }
@@ -119,6 +129,49 @@ const RepositoryInfo = styled.section`
         margin-top: 4px;
         color: #737380;
       }
+    }
+  }
+`
+
+const Issues = styled.div`
+  margin-top: 80px;
+
+  a {
+    background: #fff;
+    border-radius: 5px;
+    width: 100%;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: none.2s;
+
+    &:hover {
+      transform: translateX(6px);
+    }
+
+    & + a {
+      margin-top: 16px;
+    }
+
+    div {
+      margin: 0 16px;
+      flex: 1;
+
+      strong {
+        font-size: 20px;
+        color: #3d3d4d;
+      }
+
+      p {
+        font-size: 18px;
+        color: #a8a8b3;
+      }
+    }
+
+    svg {
+      margin-left: auto;
+      color: #cbcbd6;
     }
   }
 `
